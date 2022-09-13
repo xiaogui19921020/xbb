@@ -1,0 +1,9 @@
+server:
+  port: 6001
+
+spring:
+  application:
+    name: @artifactId@
+  profiles:
+    active: @profiles.active@
+

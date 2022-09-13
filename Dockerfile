@@ -1,0 +1,1 @@
+FROM moxm/java:1.8-full

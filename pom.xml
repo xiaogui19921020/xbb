@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.boot</groupId>
+    <artifactId>xbb</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <description>Demo project for Spring Boot</description>
+    <modules>
+        <module>gateway</module>
+        <module>web-server</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.version>2.7.3</spring-boot.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+        <docker.plugin.version>0.32.0</docker.plugin.version>
+        <docker.host>http://192.168.202.130:2375</docker.host>
+        <docker.registry>192.168.202.130:8082</docker.registry>
+        <docker.namespace>xbb</docker.namespace>
+        <docker.username>admin</docker.username>
+        <docker.password>admin</docker.password>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--指定仓库地址推送地址-->
+    <distributionManagement>
+        <snapshotRepository>
+            <!--此名称要和.m2/settings.xml中设置的ID一致-->
+            <id>nexus-registry</id>
+            <url>http://192.168.202.130:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+
+        <repository>
+            <!--此名称要和.m2/settings.xml中设置的ID一致-->
+            <id>nexus-registry</id>
+            <url>http://192.168.202.130:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <!--指定仓库地址拉取地址-->
+    <repositories>
+        <repository>
+            <id>web-public</id>
+            <name>public</name>
+            <url>http://192.168.202.130:8081/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>web-snapshots</id>
+            <name>snapshots</name>
+            <url>http://192.168.202.130:8081/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <finalName>${project.build.finalName}</finalName>
+                        <layers>
+                            <enabled>true</enabled>
+                        </layers>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                            <delimiter>${*}</delimiter>
+                            <delimiter>$[*]</delimiter>
+                        </delimiters>
+
+                        <!-- 过滤后缀不需要转码的文件后缀名.crt/.p8 -->
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
+
+
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker.plugin.version}</version>
+                    <configuration>
+                        <!-- Docker Remote Api-->
+                        <dockerHost>${docker.host}</dockerHost>
+                        <!-- Docker 镜像私服-->
+                        <registry>${docker.registry}</registry>
+                        <!-- 认证信息-->
+                        <authConfig>
+                            <push>
+                                <username>${docker.username}</username>
+                                <password>${docker.password}</password>
+                            </push>
+                        </authConfig>
+                        <images>
+                            <image>
+                                <!-- 镜像名称： 192.168.202.130:8082/fabric8/web:8.0.0-SNAPSHOT-->
+                                <name>${docker.registry}/${docker.namespace}/${project.name}:${project.version}</name>
+                                <build>
+                                    <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                                </build>
+                            </image>
+                            <image>
+                                <!-- 镜像名称： 192.168.202.130:8082/fabric8/web:latest-->
+                                <name>${docker.registry}/${docker.namespace}/${project.name}</name>
+                                <build>
+                                    <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>docker-exec</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>sit</id>
+            <properties>
+                <profiles.active>sit</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.202.128:8848
+        metadata:
+          profiles: @profiles.active@
+          version: @version@
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yml
+      - optional:nacos:${spring.application.name}-@profiles.active@.yml
