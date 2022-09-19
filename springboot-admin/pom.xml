@@ -33,7 +33,6 @@
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
