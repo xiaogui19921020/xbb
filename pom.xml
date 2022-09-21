@@ -22,6 +22,8 @@
         <spring-boot-admin.version>2.7.5</spring-boot-admin.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+
+        <maven.host>http://192.168.202.130:8081</maven.host>
         <docker.plugin.version>0.32.0</docker.plugin.version>
         <docker.host>http://192.168.202.130:2375</docker.host>
         <docker.registry>192.168.202.130:8082</docker.registry>
@@ -40,6 +42,11 @@
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
 
@@ -85,6 +92,14 @@
                 <artifactId>fastjson2</artifactId>
                 <version>2.0.14</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.7</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -93,13 +108,13 @@
         <snapshotRepository>
             <!--此名称要和.m2/settings.xml中设置的ID一致-->
             <id>nexus-registry</id>
-            <url>http://192.168.202.130:8081/repository/maven-snapshots/</url>
+            <url>${maven.host}/repository/maven-snapshots/</url>
         </snapshotRepository>
 
         <repository>
             <!--此名称要和.m2/settings.xml中设置的ID一致-->
             <id>nexus-registry</id>
-            <url>http://192.168.202.130:8081/repository/maven-releases/</url>
+            <url>${maven.host}/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
@@ -108,13 +123,13 @@
         <repository>
             <id>web-public</id>
             <name>public</name>
-            <url>http://192.168.202.130:8081/repository/maven-public/</url>
+            <url>${maven.host}/repository/maven-public/</url>
         </repository>
 
         <repository>
             <id>web-snapshots</id>
             <name>snapshots</name>
-            <url>http://192.168.202.130:8081/repository/maven-snapshots/</url>
+            <url>${maven.host}/repository/maven-snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>

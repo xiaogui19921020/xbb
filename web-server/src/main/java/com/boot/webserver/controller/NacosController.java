@@ -41,6 +41,7 @@ public class NacosController {
         NamingService namingService = NacosFactory.createNamingService(nacosServerAddr);
         Map<String, String> metaData = new LinkedHashMap<>();
         List<Instance> instances = namingService.selectInstances(serviceName, true);
+
         if (!CollectionUtils.isEmpty(instances)) {
             for (Instance instance : instances) {
                 if (servicePort == instance.getPort()) {
