@@ -13,3 +13,14 @@ spring:
       - optional:nacos:global-application.yml
       - optional:nacos:${spring.application.name}.yml
       - optional:nacos:${spring.application.name}-@profiles.active@.yml
+
+
+minio:
+  endpoint: http://192.168.202.128:9000
+  port: 9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  secure: false
+  bucket-name: xbb # 桶名
+  image-size: 10485760 # 图片文件的最大大小
+  file-size: 1073741824 # 文件的最大大小

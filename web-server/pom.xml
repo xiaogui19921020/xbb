@@ -54,6 +54,17 @@
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
 
+
+        <!--  minio 依赖  -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+        <!--  minio 依赖于 okhttp  -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,6 +1,9 @@
 package com.boot.webserver.controller;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.boot.webserver.service.AsyncService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,13 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
+    @Autowired
+    private AsyncService asyncService;
 
     @Value("${server.port}")
     private int port;
 
     @GetMapping("/info")
     public Object info() {
-        log.info(" info {}", port);
-        return "ok - " + port;
+        JSONObject json = new JSONObject();
+        return json;
     }
 }
