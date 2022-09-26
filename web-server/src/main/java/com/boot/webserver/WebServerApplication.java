@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class WebServerApplication {
 
     public static void main(String[] args) {
+        //System.setProperty("server.port", "7002");
+        //System.setProperty("spring.cloud.nacos.discovery.metadata.version", "V1");
         SpringApplication.run(WebServerApplication.class, args);
     }
 

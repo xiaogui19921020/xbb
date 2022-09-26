@@ -1,6 +1,6 @@
 package com.boot.webserver.controller.common;
 
-import com.boot.webserver.minio.MinioService;
+import com.boot.webserver.service.minio.MinioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

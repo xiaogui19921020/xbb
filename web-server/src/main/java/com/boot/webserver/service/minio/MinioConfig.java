@@ -1,4 +1,4 @@
-package com.boot.webserver.minio;
+package com.boot.webserver.service.minio;
 
 import io.minio.MinioClient;
 import lombok.Data;

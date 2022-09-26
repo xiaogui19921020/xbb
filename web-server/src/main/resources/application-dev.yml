@@ -13,7 +13,57 @@ spring:
       - optional:nacos:global-application.yml
       - optional:nacos:${spring.application.name}.yml
       - optional:nacos:${spring.application.name}-@profiles.active@.yml
+  redis:
+    enable: true
+    host: 194.41.36.225
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 20000
+    lettuce:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-idle: 8
+        max-wait: -1
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://194.41.36.225:3307/otc?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&allowMultiQueries=true
+    username: otcdb
+    password: 0018H0EUa7ZCgCNT2lY
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: apiHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
 
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: linkedhashmap
+      keyConvertor: fastjson
+      limit: 100
+  remote:
+    default:
+      type: redis
+      keyConvertor: fastjson
+      valueEncoder: java
+      valueDecoder: java
+      poolConfig:
+        minIdle: 5
+        maxIdle: 20
+        maxTotal: 50
+      host: ${spring.redis.host}
+      port: ${spring.redis.port}
+      password: ${spring.redis.password}
+      database: 1
 
 minio:
   endpoint: http://192.168.202.128:9000
@@ -24,3 +74,6 @@ minio:
   bucket-name: xbb # 桶名
   image-size: 10485760 # 图片文件的最大大小
   file-size: 1073741824 # 文件的最大大小
+
+
+

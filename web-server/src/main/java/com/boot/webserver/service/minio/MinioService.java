@@ -1,4 +1,4 @@
-package com.boot.webserver.minio;
+package com.boot.webserver.service.minio;
 
 import cn.hutool.core.util.IdUtil;
 import io.minio.*;
