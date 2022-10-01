@@ -97,6 +97,12 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
         </dependency>
 
+        <!--google验证器-->
+        <dependency>
+            <groupId>dev.samstevens.totp</groupId>
+            <artifactId>totp-spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
